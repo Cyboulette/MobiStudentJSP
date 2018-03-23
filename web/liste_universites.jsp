@@ -11,7 +11,7 @@
     </thead>
     <tbody>
         <%
-            Vector<Universite> universites = (Vector<Universite>)session.getAttribute("universites");
+            Vector<Universite> universites = (Vector<Universite>)request.getAttribute("universites");
             for(Universite universite : universites) {
                 out.print("<tr>");
                     out.print("<td>"+universite.getNom()+"</td>");

@@ -1,5 +1,12 @@
 package Models;
 
+import Utils.dbUtils;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
+
 /**
  *
  * @author Quentin DESBIN, Arnaud HERTEL
@@ -13,6 +20,7 @@ public class Etudiant {
     private String email;
     private String cv;
 
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public int getId() {
         return id;
     }
@@ -68,6 +76,37 @@ public class Etudiant {
     public void setCv(String cv) {
         this.cv = cv;
     }
+    //</editor-fold>
     
+    //<editor-fold defaultstate="show" desc="Méthodes">
+    public static Vector<Etudiant> getAll() {
+        Vector<Etudiant> objects = new Vector<Etudiant>(); // On va stocker tous nos objets récupérés dans un Vecteur
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        ResultSet result = dbUtils.query(conn, "SELECT * FROM etudiants e JOIN diplomes d ON d.id = e.diplome_id"); // Première étape : tout récupérer de toutes les universités
+        try {
+            while(result.next()) {
+                Etudiant object = new Etudiant(); // On crée notre objet
+                object.setId(result.getInt("id")); // On lui assigne son ID
+                object.setNumEtudiant(result.getInt("num_etudiant")); // Son numéro étudiant
+                object.setNom(result.getString("nom")); // Son nom
+                object.setPrenom(result.getString("prenom")); // Son prénom
+                object.setEmail(result.getString("email")); // Son email
+                object.setCv(result.getString("cv")); // Son cv
+                
+                Diplome diplome = new Diplome();
+                diplome.setId(result.getInt("id"));
+                diplome.setIntitule(result.getString("intitule"));
+                diplome.setAdresseWeb(result.getString("adresse_web"));
+                diplome.setNiveau(result.getInt("niveau"));
+
+                // Enfin, on ajoute à notre Vector de retour notre objet
+                objects.add(object);
+            }
+        } catch(SQLException e) {
+            // Nothing
+        }
+        return objects;
+    }
+    //</editor-fold>
     
 }

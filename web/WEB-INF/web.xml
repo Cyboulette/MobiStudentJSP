@@ -8,6 +8,14 @@
         <servlet-name>UniversitesController</servlet-name>
         <url-pattern>/universites</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>MobilitesController</servlet-name>
+        <servlet-class>Controllers.MobilitesController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MobilitesController</servlet-name>
+        <url-pattern>/mobilites</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

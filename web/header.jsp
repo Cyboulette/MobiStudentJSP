@@ -1,5 +1,6 @@
+<%@page import="Utils.ControllerUtilsInterface"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Models.Universite"%>
+<%@page import="Models.*"%>
 <%@page import="java.util.Vector"%>
 <!DOCTYPE html>
 <!DOCTYPE html>
@@ -10,6 +11,7 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script src="js/jquery.min.js"></script>
+	<script src="js/popper.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/font-awesome-all.js"></script>
 	<script src="js/script.js"></script>
@@ -24,11 +26,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
+                <li class="nav-item <%=ControllerUtilsInterface.active(request, "index", null)%>">
                     <a class="nav-link" href="index.jsp">Accueil</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <%=ControllerUtilsInterface.active(request, "liste_universites", "liste")%>">
                     <a class="nav-link" href="./universites?action=liste">Liste des universités</a>
+                </li>
+                <li class="nav-item <%=ControllerUtilsInterface.active(request, "search_mobilites", "search")%>">
+                    <a class="nav-link" href="./mobilites?action=search">Afficher les mobilités</a>
                 </li>
             </ul>
         </div>

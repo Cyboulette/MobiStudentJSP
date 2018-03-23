@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.Etudiant;
 import Models.Universite;
 import Utils.ControllerUtilsInterface;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Quentin DESBIN, Arnaud HERTEL
  */
-public class UniversitesController extends HttpServlet {
+public class MobilitesController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,9 +39,10 @@ public class UniversitesController extends HttpServlet {
         String action = request.getParameter("action"); // On récupère l'action passée en GET ou POST
         if(action != null && !action.isEmpty()) { // Si on est sûr que l'action a bien été passée
             switch(action.toUpperCase()) { // On passe en majuscule pour ignorer la casse
-                case "LISTE":
+                case "SEARCH":
+                    request.setAttribute("etudiants", Etudiant.getAll());
                     request.setAttribute("universites", Universite.getAll());
-                    ControllerUtilsInterface.redirectTo("/liste_universites.jsp", request, response);
+                    ControllerUtilsInterface.redirectTo("/search_mobilites.jsp", request, response);
                     break;
                 default:
                     ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
