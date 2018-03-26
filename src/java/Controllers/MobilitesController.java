@@ -1,5 +1,6 @@
 package Controllers;
 
+import Models.DemandeMobilite;
 import Models.Etudiant;
 import Models.Universite;
 import Utils.ControllerUtilsInterface;
@@ -44,6 +45,18 @@ public class MobilitesController extends HttpServlet {
                     request.setAttribute("universites", Universite.getAll());
                     ControllerUtilsInterface.redirectTo("/search_mobilites.jsp", request, response);
                     break;
+                case "DEMANDES_MOBILITES_ETUDIANTS":
+                    int num_etudiant = Integer.parseInt(request.getParameter("num_etudiant"));
+                    request.setAttribute("demandes", DemandeMobilite.getMobisByEtud(num_etudiant));
+                    ControllerUtilsInterface.redirectTo("/demandes_etudiants.jsp", request, response);
+                case "DEMANDES_MOBILITES_UNIVERSITES":
+                    String nom = request.getParameter("nom_univ");
+                    request.setAttribute("demandes", DemandeMobilite.getMobisByUniv(nom));
+                    ControllerUtilsInterface.redirectTo("/demandes_universites.jsp", request, response);
+                case "DEMANDES_MOBILITES_DIPLOMES":
+                    String intitule = request.getParameter("intitule");
+                    request.setAttribute("demandes", DemandeMobilite.getMobisByDiplome(intitule));
+                    ControllerUtilsInterface.redirectTo("/demandes_diplomes.jsp", request, response);
                 default:
                     ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
                     break;

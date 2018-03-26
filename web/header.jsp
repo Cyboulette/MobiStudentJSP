@@ -35,6 +35,21 @@
                 <li class="nav-item <%=ControllerUtilsInterface.active(request, "search_mobilites", "search")%>">
                     <a class="nav-link" href="./mobilites?action=search">Afficher les mobilités</a>
                 </li>
+                <form class="form-inline my-2 my-lg-0" method="get" action="./mobilites">
+                    <input class="form-control mr-sm-2" type="hidden" name="action" value="demandes_mobilites_etudiants">
+                    <input class="form-control mr-sm-2" type="number" name="num_etudiant" placeholder="Numéro Etudiant" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Chercher</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" method="get" action="./mobilites">
+                    <input class="form-control mr-sm-2" type="hidden" name="action" value="demandes_mobilites_universites">
+                    <input class="form-control mr-sm-2" type="text" name="nom_univ" placeholder="Nom Université" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Chercher</button>
+                </form>
+                <form class="form-inline my-2 my-lg-0" method="get" action="./mobilites">
+                    <input class="form-control mr-sm-2" type="hidden" name="action" value="demandes_mobilites_diplomes">
+                    <input class="form-control mr-sm-2" type="text" name="intitule" placeholder="Nom Diplôme" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Chercher</button>
+                </form>
             </ul>
         </div>
     </nav>
