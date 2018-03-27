@@ -35,6 +35,9 @@
                 <li class="nav-item <%=ControllerUtilsInterface.active(request, "search_mobilites", "search")%>">
                     <a class="nav-link" href="./mobilites?action=search">Afficher les mobilités</a>
                 </li>
+                <li class="nav-item <%=ControllerUtilsInterface.active(request, "search_programmes", "search")%>">
+                    <a class="nav-link" href="./programmes?action=search">Afficher les programmes</a>
+                </li>
                 <form class="form-inline my-2 my-lg-0" method="get" action="./mobilites">
                     <input class="form-control mr-sm-2" type="hidden" name="action" value="demandes_mobilites_etudiants">
                     <input class="form-control mr-sm-2" type="number" name="num_etudiant" placeholder="Numéro Etudiant" aria-label="Search">
