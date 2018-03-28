@@ -105,6 +105,30 @@ public class Universite {
         return objects;
     }
     
+        public static Universite getUnivByDiplome(int idD) {
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        Universite univ = null; // On crée un objet diplome
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM universites u, diplomes d"
+                    + " WHERE u.id = d.universite_id"
+                    + " AND d.id = ?;");
+            statement.setInt(1, idD);
+            ResultSet result = statement.executeQuery(); // On exécute la requête
+            
+            while (result.next()) { // Pour tous les diplomes trouvés
+                univ = new Universite(); // On instancieun objet diplome
+                univ.setId(result.getInt("id")); // On lui récupère son ID
+                univ.setNom(result.getString("nom")); // Son nom
+                univ.setAdresseWeb(result.getString("adresse_web")); // Son AdresseWeb
+                univ.setAdressePostale(result.getString("adresse_postale")); // Son AdressePostale
+                univ.setAdresseMail(result.getString("adresse_mail")); // Son AdresseMail
+            }
+        } catch (SQLException e) {
+            //Nothing
+        }
+        return univ;
+    }
+    
     public String toString() {
         return this.nom;
     }

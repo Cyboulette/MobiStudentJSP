@@ -107,6 +107,35 @@ public class Etudiant {
         }
         return objects;
     }
+    
+    public static Etudiant getEtudiant(int id) {
+        Etudiant etudiant = null;
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        try {
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM etudiants e JOIN diplomes d ON d.id = e.diplome_id WHERE e.id = ?"); // Première étape : tout récupérer de toutes les universités
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
+            result.next();
+            
+            etudiant = new Etudiant(); // On crée notre objet
+            etudiant.setId(result.getInt("id")); // On lui assigne son ID
+            etudiant.setNumEtudiant(result.getInt("num_etudiant")); // Son numéro étudiant
+            etudiant.setNom(result.getString("nom")); // Son nom
+            etudiant.setPrenom(result.getString("prenom")); // Son prénom
+            etudiant.setEmail(result.getString("email")); // Son email
+            etudiant.setCv(result.getString("cv")); // Son cv
+
+            Diplome diplome = new Diplome();
+            diplome.setId(result.getInt("id"));
+            diplome.setIntitule(result.getString("intitule"));
+            diplome.setAdresseWeb(result.getString("adresse_web"));
+            diplome.setNiveau(result.getInt("niveau"));
+            etudiant.setDiplome(diplome);
+        } catch(SQLException e) {
+            // Nothing
+        }
+        return etudiant;
+    }
     //</editor-fold>
     
 }

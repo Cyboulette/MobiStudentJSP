@@ -4,6 +4,10 @@
         <servlet-name>UniversitesController</servlet-name>
         <servlet-class>Controllers.UniversitesController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProgrammesController</servlet-name>
+        <servlet-class>Controllers.ProgrammesController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UniversitesController</servlet-name>
         <url-pattern>/universites</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>MobilitesController</servlet-name>
         <url-pattern>/mobilites</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProgrammesController</servlet-name>
+        <url-pattern>/programmes</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -28,17 +36,17 @@
         </web-resource-collection>
         <!-- OMIT auth-constraint -->
     </security-constraint>
-    <security-constraint> 
-        <web-resource-collection> 
-            <web-resource-name>Deny Direct Access</web-resource-name> 
-            <description></description> 
-            <url-pattern>*.jsp</url-pattern> 
-        </web-resource-collection> 
-        <auth-constraint> 
-            <role-name>Denied</role-name> 
-        </auth-constraint> 
-    </security-constraint> 
-    <security-role> 
-        <role-name>Denied</role-name> 
-    </security-role> 
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Deny Direct Access</web-resource-name>
+            <description/>
+            <url-pattern>*.jsp</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>Denied</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-role>
+        <role-name>Denied</role-name>
+    </security-role>
 </web-app>
