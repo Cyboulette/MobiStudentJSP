@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         <%
-            Vector<Programme> programmes = (Vector<Programme>)request.getAttribute("programmes");
+            Vector<Programme> programmes = (Vector<Programme>)request.getAttribute("programmes_contrats");
             for(Programme prog : programmes) {
                 out.print("<tr>");
                     out.print("<td>"+prog.getIntitule()+"</td>");

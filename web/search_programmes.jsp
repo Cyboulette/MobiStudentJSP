@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@include file="header.jsp" %>
-<h1>Demandes de mobilités</h1>
-<form method="POST" action="MobilitesController">
+<h1>Demandes de programmes</h1>
+<form method="POST" action="programmesController">
     <div class="form-group">
         <label for="intitule">Rechercher par programme</label>
         <select name="intitule" id="intitule" class="form-control selectpicker" data-live-search="true">
@@ -11,9 +11,8 @@
                     out.print("<option value='"+p.getId()+"'>"+p.getIntitule()+"</option>");
                 }
             %>
-            <input type="hidden" name="action" value="PROGRAMMES_INTITULES">
-            <input type="submit">
         </select>
+        <input type="submit">
     </div>
 </form>
 

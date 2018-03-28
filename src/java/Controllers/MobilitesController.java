@@ -49,14 +49,23 @@ public class MobilitesController extends HttpServlet {
                     int num_etudiant = Integer.parseInt(request.getParameter("num_etudiant"));
                     request.setAttribute("demandes", DemandeMobilite.getMobisByEtud(num_etudiant));
                     ControllerUtilsInterface.redirectTo("/demandes_etudiants.jsp", request, response);
+                    break;
                 case "DEMANDES_MOBILITES_UNIVERSITES":
                     String nom = request.getParameter("nom_univ");
                     request.setAttribute("demandes", DemandeMobilite.getMobisByUniv(nom));
                     ControllerUtilsInterface.redirectTo("/demandes_universites.jsp", request, response);
+                    break;
                 case "DEMANDES_MOBILITES_DIPLOMES":
                     String intitule = request.getParameter("intitule");
                     request.setAttribute("demandes", DemandeMobilite.getMobisByDiplome(intitule));
                     ControllerUtilsInterface.redirectTo("/demandes_diplomes.jsp", request, response);
+                    break;
+                case "ADD_MOBILITES" :
+                    int id_Diplome = Integer.parseInt(request.getParameter("id_Diplome"));
+                    int id_Etudiant = Integer.parseInt(request.getParameter("id_Etudiant"));
+                    String date_depot = request.getParameter("date_depot");
+                    char etat = request.getParameter("etat").charAt(0);
+                    DemandeMobilite.add(id_Diplome, id_Etudiant, date_depot, etat);
                 default:
                     ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
                     break;

@@ -45,11 +45,6 @@ public class ProgrammesController extends HttpServlet {
                     request.setAttribute("programmes", Programme.getAll());
                     ControllerUtilsInterface.redirectTo("/search_programmes.jsp", request, response);
                     break;
-                case "PROGRAMMES_INTITULES":
-                    String intitule = request.getParameter("intitule");
-                    request.setAttribute("programmes", Programme.getProgsAndContrats(intitule));
-                    ControllerUtilsInterface.redirectTo("/programmes.jsp", request, response);
-                    break;
                 default:
                     ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
                     break;
