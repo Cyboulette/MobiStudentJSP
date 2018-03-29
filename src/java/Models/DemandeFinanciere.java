@@ -1,5 +1,10 @@
 package Models;
 
+import Utils.dbUtils;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 
 
@@ -12,7 +17,7 @@ public class DemandeFinanciere {
     private String date_depot;
     private char etat;
     private double montant_accorde;
-    private Vector<Contrat> lesContrats;
+    private int idContrat;
 
     public int getId() {
         return id;
@@ -46,12 +51,67 @@ public class DemandeFinanciere {
         this.montant_accorde = montant_accorde;
     }
 
-    public Vector<Contrat> getLesContrats() {
-        return lesContrats;
+    public int getIdContrat() {
+        return idContrat;
     }
 
-    public void setLesContrats(Vector<Contrat> lesContrats) {
-        this.lesContrats = lesContrats;
+    public void setIdContrat(int id) {
+        this.idContrat = id;
     }
     
+    public static void add(){
+        
+    }
+    public static Vector<DemandeFinanciere> getDemandeFiByContrat(int idC){
+        Vector<DemandeFinanciere> objects = new Vector<DemandeFinanciere>(); 
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_financieres d"
+                            + " WHERE contrat_id = ?");
+            statement.setInt(1, idC);
+            ResultSet result = statement.executeQuery();
+            while(result.next())
+            {                
+            DemandeFinanciere object = new DemandeFinanciere();
+            object.setId(result.getInt("id")); // On lui assigne son ID
+            object.setDate_depot(result.getString("date_depot")); // Sa date de dépôt
+            object.setEtat(result.getString("etat").charAt(0)); // Son État
+            object.setMontant_accorde(result.getDouble("montant_accorde")); // Son montant
+            object.setIdContrat(idC);  
+            objects.add(object);
+            }
+         
+        } catch(SQLException e) {
+            // Nothing
+        }
+        return objects;
+    }
+    
+    public static Vector<DemandeFinanciere> getDemandeFiByContratByProg(int idC, int idP){
+        Vector<DemandeFinanciere> objects = new Vector<DemandeFinanciere>(); 
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_financieres d, contrats c"
+                    + " WHERE d.contrat_id = c.id"
+                    + " AND contrat_id = ?"
+                    + " AND programme_id = ?");
+            statement.setInt(1, idC);
+            statement.setInt(2, idP);
+            ResultSet result = statement.executeQuery();
+            while(result.next())
+            {  
+            DemandeFinanciere object = new DemandeFinanciere();
+            object.setId(result.getInt("id")); // On lui assigne son ID
+            object.setDate_depot(result.getString("date_depot")); // Sa date de dépôt
+            object.setEtat(result.getString("etat").charAt(0)); // Son État
+            object.setMontant_accorde(result.getDouble("montant_accorde")); // Son montant
+            object.setIdContrat(idC); 
+            objects.add(object);
+            }    
+        } catch(SQLException e) {
+            // Nothing
+        }
+        return objects;
+    }
+        
 }

@@ -63,4 +63,27 @@ public class Programme {
         }
         return objects;
     }
+    
+    public static Vector<Programme> getProgrammesByContrat(int idC){
+        Vector<Programme> objects = new Vector<Programme>(); 
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM programmes p, contrats c"
+                    + " WHERE p.id = c.programme_id"
+                    + " AND programme_id = ?");
+            statement.setInt(1, idC);
+            ResultSet result = statement.executeQuery();
+            while(result.next())
+            {  
+            Programme object = new Programme();
+            object.setId(result.getInt("id")); // On lui assigne son ID
+            object.setIntitule(result.getString("intitule")); // Sa date de dépôt
+            object.setExplication(result.getString("explication")); // Son État
+            objects.add(object);
+            }    
+        } catch(SQLException e) {
+            // Nothing
+        }
+        return objects;
+    }
 }

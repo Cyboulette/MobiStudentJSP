@@ -97,16 +97,17 @@ public class DemandeMobilite {
                         + " AND de.id = ?;");
                 statement.setInt(1, object.getId()); // On assigne notre premiere inconnue dans la requête préparée : "?" à notre object.getId();
                 ResultSet result3 = statement.executeQuery(); // On exécute la requête
-        
-                Etudiant diplome = new Diplome(); // On crée un objet programme
-                diplome.setId(result2.getInt("id")); // On lui récupère son ID
-                diplome.setIntitule(result2.getString("intitule")); // Son intitulé
-                diplome.setAdresseWeb(result2.getString("adresse_web")); // Son AdresseWeb
-                diplome.setNiveau(Integer.parseInt(result2.getString("niveau"))); // Son Niveau
-                diplome.setUniversite(Universite.getUnivByDiplome(diplome.getId()));
+        /*
+                Etudiant e = new Etudiant(); // On crée un objet programme
+                e.setId(result2.getInt("id")); // On lui récupère son ID
+                e.setNom(result2.getString("nom")); // Son intitulé
+                e.setPrenom(result2.getString("prenom")); // Son intitulé
+                e.setAdresseWeb(result2.getString("adresse_web")); // Son AdresseWeb
+                e.setNiveau(Integer.parseInt(result2.getString("niveau"))); // Son Niveau
+                e.setUniversite(Universite.getUnivByDiplome(diplome.getId()));
                 object.setDiplome(diplome);
                 // Enfin, on ajoute à notre Vector de retour notre objet
-                objects.add(object);
+                objects.add(object);*/
             }
         } catch(SQLException e) {
             // Nothing
