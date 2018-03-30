@@ -1,7 +1,9 @@
 package Controllers;
 
 import Models.Contrat;
+import Models.DemandeFinanciere;
 import Models.DemandeMobilite;
+import Models.Diplome;
 import Models.Etudiant;
 import Models.Programme;
 import Models.Universite;
@@ -19,7 +21,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author ahertel
  */
-public class ProgrammesController extends HttpServlet {
+public class FinancieresController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,24 +35,55 @@ public class ProgrammesController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        // La session
+// La session
         HttpSession session = request.getSession();
-        
+
         // Le dispatcher de requetes
         RequestDispatcher rd = null;
-        
+
         String action = request.getParameter("action"); // On récupère l'action passée en GET ou POST
-        if(action != null && !action.isEmpty()) { // Si on est sûr que l'action a bien été passée
-            switch(action.toUpperCase()) { // On passe en majuscule pour ignorer la casse
-                case "SEARCH":                    
+        if (action != null && !action.isEmpty()) { // Si on est sûr que l'action a bien été passée
+            switch (action.toUpperCase()) { // On passe en majuscule pour ignorer la casse
+                case "SEARCH":
+                    request.setAttribute("contrats", Contrat.getAll());
                     request.setAttribute("programmes", Programme.getAll());
-                    ControllerUtilsInterface.redirectTo("/search_programmes.jsp", request, response);
+                    ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
                     break;
-                case "LISTE_PROGRAMME_CONTRAT":          
-                    int idP = Integer.parseInt(request.getParameter("intitule"));
-                    request.setAttribute("programmes", Programme.getAll());
-                    request.setAttribute("programmes_contrats", Contrat.getContratsByProgrammes(idP));
-                    ControllerUtilsInterface.redirectTo("/search_programmes.jsp", request, response);
+                case "DEMANDES_FINANCIERES":
+                    if (request.getParameter("contrat_id") != null) {
+                        int contrat_id = Integer.parseInt(request.getParameter("contrat_id"));
+                        request.setAttribute("contrats", Contrat.getAll());
+                        request.setAttribute("programmes", Programme.getAll());
+                        request.setAttribute("financieres", DemandeFinanciere.getDemandeFiByContrat(contrat_id));
+                        ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
+                    } else if (request.getParameter("programme_id") != null) {
+                        int programme_id = Integer.parseInt(request.getParameter("programme_id"));
+                        request.setAttribute("programmes", Programme.getAll());
+                        request.setAttribute("contrats", Contrat.getAll());
+                        request.setAttribute("financieres", DemandeFinanciere.getDemandeFiByProg(programme_id));
+                        ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
+                    }
+                    break;
+                case "ADD":
+                    request.setAttribute("contrats", Contrat.getAll());
+                    ControllerUtilsInterface.redirectTo("/addFin.jsp", request, response);
+                    break;
+                case "ADD_FINANCIERES":
+                    DemandeFinanciere fin = new DemandeFinanciere();
+                    fin.setIdContrat(Integer.parseInt(request.getParameter("contrat_id")));
+                    fin.setDate_depot(request.getParameter("date_depot"));
+                    fin.setEtat(request.getParameter("etat"));
+                    fin.setMontant_accorde(Double.parseDouble(request.getParameter("montant_accorde")));
+                    boolean ajout = fin.add();
+                    if (ajout) {
+                        session.setAttribute("message", "ok");
+                        request.setAttribute("contrats", Contrat.getAll());
+                        request.setAttribute("programmes", Programme.getAll());
+                        ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
+                    } else {
+                        session.setAttribute("error", "Erreur dans l'ajout");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    }
                     break;
                 default:
                     ControllerUtilsInterface.redirectTo("/index.jsp", request, response);

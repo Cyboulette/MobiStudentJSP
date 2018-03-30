@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,10 +16,10 @@ import java.sql.SQLException;
 public class Diplome {
 
     private int id;
-    private Universite universite;
     private String intitule;
     private String adresseWeb;
     private int niveau;
+    private String universite;
 
     public int getId() {
         return id;
@@ -26,13 +29,14 @@ public class Diplome {
         this.id = id;
     }
 
-    public Universite getUniversite() {
+    public String getUniversite() {
         return universite;
     }
 
-    public void setUniversite(Universite universite) {
+    public void setUniversite(String universite) {
         this.universite = universite;
     }
+
 
     public String getIntitule() {
         return intitule;
@@ -57,6 +61,27 @@ public class Diplome {
     public void setNiveau(int niveau) {
         this.niveau = niveau;
     }
+    public static Vector<Diplome> getAll(){
+        Vector<Diplome> objects = new Vector<Diplome>(); // On va stocker tous nos objets récupérés dans un Vecteur
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        
+        try {
+            ResultSet result = dbUtils.query(conn, "SELECT * FROM diplomes d, universites u WHERE d.universite_id = u.id"); // Première étape : tout récupérer de toutes les universités
+            while(result.next()) {
+                Diplome object = new Diplome(); // On crée notre objet
+                object.setId(result.getInt("id")); // On lui assigne son ID
+                object.setIntitule(result.getString("intitule")); 
+                object.setAdresseWeb(result.getString("adresse_web")); 
+                object.setNiveau(result.getInt("niveau"));
+                object.setUniversite(result.getString("u.nom"));
+                objects.add(object);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Diplome.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return objects;
+                
+    }
 
     public static Diplome getDiplomeByMobi(int idMobi) {
         Connection conn = dbUtils.connect(); // On se connecte à la base
@@ -74,12 +99,13 @@ public class Diplome {
                 diplome.setIntitule(result.getString("intitule")); // Son intitulé
                 diplome.setAdresseWeb(result.getString("adresse_web")); // Son AdresseWeb
                 diplome.setNiveau(Integer.parseInt(result.getString("niveau"))); // Son Niveau    
-                diplome.setUniversite(Universite.getUnivByDiplome(diplome.getId()));
+                //diplome.setUniversite(Universite.getUnivByDiplome(diplome.getId()));
             }
         } catch (SQLException e) {
             //Nothing
         }
         return diplome;
     }
+    
 
 }

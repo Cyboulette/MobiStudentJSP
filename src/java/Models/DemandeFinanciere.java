@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -15,7 +17,7 @@ import java.util.Vector;
 public class DemandeFinanciere {
     private int id;
     private String date_depot;
-    private char etat;
+    private String etat;
     private double montant_accorde;
     private int idContrat;
 
@@ -35,11 +37,11 @@ public class DemandeFinanciere {
         this.date_depot = date_depot;
     }
 
-    public char getEtat() {
+    public String getEtat() {
         return etat;
     }
 
-    public void setEtat(char etat) {
+    public void setEtat(String etat) {
         this.etat = etat;
     }
 
@@ -59,9 +61,6 @@ public class DemandeFinanciere {
         this.idContrat = id;
     }
     
-    public static void add(){
-        
-    }
     public static Vector<DemandeFinanciere> getDemandeFiByContrat(int idC){
         Vector<DemandeFinanciere> objects = new Vector<DemandeFinanciere>(); 
         Connection conn = dbUtils.connect(); // On se connecte à la base
@@ -75,7 +74,7 @@ public class DemandeFinanciere {
             DemandeFinanciere object = new DemandeFinanciere();
             object.setId(result.getInt("id")); // On lui assigne son ID
             object.setDate_depot(result.getString("date_depot")); // Sa date de dépôt
-            object.setEtat(result.getString("etat").charAt(0)); // Son État
+            object.setEtat(result.getString("etat")); // Son État
             object.setMontant_accorde(result.getDouble("montant_accorde")); // Son montant
             object.setIdContrat(idC);  
             objects.add(object);
@@ -87,25 +86,23 @@ public class DemandeFinanciere {
         return objects;
     }
     
-    public static Vector<DemandeFinanciere> getDemandeFiByContratByProg(int idC, int idP){
+    public static Vector<DemandeFinanciere> getDemandeFiByProg(int idP){
         Vector<DemandeFinanciere> objects = new Vector<DemandeFinanciere>(); 
         Connection conn = dbUtils.connect(); // On se connecte à la base
         try{
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_financieres d, contrats c"
                     + " WHERE d.contrat_id = c.id"
-                    + " AND contrat_id = ?"
                     + " AND programme_id = ?");
-            statement.setInt(1, idC);
-            statement.setInt(2, idP);
+            statement.setInt(1, idP);
             ResultSet result = statement.executeQuery();
             while(result.next())
             {  
             DemandeFinanciere object = new DemandeFinanciere();
             object.setId(result.getInt("id")); // On lui assigne son ID
             object.setDate_depot(result.getString("date_depot")); // Sa date de dépôt
-            object.setEtat(result.getString("etat").charAt(0)); // Son État
+            object.setEtat(result.getString("etat")); // Son État
             object.setMontant_accorde(result.getDouble("montant_accorde")); // Son montant
-            object.setIdContrat(idC); 
+            object.setIdContrat(result.getInt("contrat_id")); 
             objects.add(object);
             }    
         } catch(SQLException e) {
@@ -113,5 +110,27 @@ public class DemandeFinanciere {
         }
         return objects;
     }
+        public boolean add(){
+        boolean add = false;
+        Connection conn = dbUtils.connect();
+        String sql = "INSERT INTO demande_financieres VALUES(null, ?,?,?,?);";
         
+        try{
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, this.idContrat);
+            prepared.setString(2, this.date_depot);
+            prepared.setString(3, this.etat);
+            prepared.setDouble(4, this.montant_accorde);
+            
+            int nbInsert = prepared.executeUpdate();
+            if(nbInsert > 0) add = true;
+            prepared.close();
+        }catch (SQLException ex){
+            add = false;
+            System.out.print(ex.getMessage());
+        }
+        dbUtils.disconnect(conn);
+        return add;
+    }
+            
 }

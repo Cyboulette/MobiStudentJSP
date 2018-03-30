@@ -8,6 +8,10 @@
         <servlet-name>ProgrammesController</servlet-name>
         <servlet-class>Controllers.ProgrammesController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FinancieresController</servlet-name>
+        <servlet-class>Controllers.FinancieresController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>UniversitesController</servlet-name>
         <url-pattern>/universites</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>ProgrammesController</servlet-name>
         <url-pattern>/programmes</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FinancieresController</servlet-name>
+        <url-pattern>/financieres</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

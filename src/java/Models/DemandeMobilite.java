@@ -15,9 +15,12 @@ import java.util.Vector;
 public class DemandeMobilite {
     private int id;
     private String date_depot;
-    private char etat;
-    private Diplome diplome;
-    private Etudiant etudiant;
+    private String etat;
+    private int idEtudiant;
+    private int numEtudiant;
+    private int idDiplome;
+    private String intituleDiplome;
+    private String nomUniv;
 
     public int getId() {
         return id;
@@ -35,103 +38,71 @@ public class DemandeMobilite {
         this.date_depot = date_depot;
     }
 
-    public char getEtat() {
+    public String getEtat() {
         return etat;
     }
 
-    public void setEtat(char etat) {
+    public void setEtat(String etat) {
         this.etat = etat;
     }
 
-    public Diplome getDiplome() {
-        return diplome;
+    public int getIdEtudiant() {
+        return idEtudiant;
     }
 
-    public void setDiplome(Diplome diplome) {
-        this.diplome = diplome;
+    public void setIdEtudiant(int idEtudiant) {
+        this.idEtudiant = idEtudiant;
     }
 
-    public Etudiant getEtudiant() {
-        return etudiant;
+    public int getNumEtudiant() {
+        return numEtudiant;
     }
 
-    public void setEtudiant(Etudiant etudiant) {
-        this.etudiant = etudiant;
+    public void setNumEtudiant(int numEtudiant) {
+        this.numEtudiant = numEtudiant;
     }
 
+    public int getIdDiplome() {
+        return idDiplome;
+    }
+
+    public void setIdDiplome(int idDiplome) {
+        this.idDiplome = idDiplome;
+    }
+
+    public String getIntituleDiplome() {
+        return intituleDiplome;
+    }
+
+    public void setIntituleDiplome(String intituleDiplome) {
+        this.intituleDiplome = intituleDiplome;
+    }
+
+    public String getNomUniv() {
+        return nomUniv;
+    }
+
+    public void setNomUniv(String nomUniv) {
+        this.nomUniv = nomUniv;
+    }
     
-    public static Vector<DemandeMobilite> getAll() {
-        Vector<DemandeMobilite> objects = new Vector<DemandeMobilite>(); // On va stocker tous nos objets récupérés dans un Vecteur
-        Connection conn = dbUtils.connect(); // On se connecte à la base
-        ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites d"); // Première étape : tout récupérer de toutes les universités
-        try {
-            while(result.next()) {
-                DemandeMobilite object = new DemandeMobilite(); // On crée notre objet
-                object.setId(result.getInt("id")); // On lui assigne son ID
-                object.setDate_depot(result.getString("date_depot")); // Sa date de dépôt
-                object.setEtat(result.getString("etat").charAt(0)); // Son État
-                object.setDiplome(Diplome.getDiplomeByMobi(object.getId()));
-                
-                /**
-                 * On travaille en objet, donc notre demandeMobi à des diplomes associés (0 ou n)
-                 * Il faut donc faire une requête supplémentaire pour récupérer les informations des diplomes et les stocker dans le vecteur this.lesDiplomes
-                 */
-                // Deuxième étape : on fait une requête préparée pour joindre notre université actuelle avec ses potentiels programmes
-                PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_mobilites de, diplomes d"
-                        + " WHERE de.diplome_id = d.id"
-                        + " AND de.id = ?;");
-                statement.setInt(1, object.getId()); // On assigne notre premiere inconnue dans la requête préparée : "?" à notre object.getId();
-                ResultSet result2 = statement.executeQuery(); // On exécute la requête
-        
-                Diplome diplome = new Diplome(); // On crée un objet programme
-                diplome.setId(result2.getInt("id")); // On lui récupère son ID
-                diplome.setIntitule(result2.getString("intitule")); // Son intitulé
-                diplome.setAdresseWeb(result2.getString("adresse_web")); // Son AdresseWeb
-                diplome.setNiveau(Integer.parseInt(result2.getString("niveau"))); // Son Niveau
-                diplome.setUniversite(Universite.getUnivByDiplome(diplome.getId()));
-                object.setDiplome(diplome);
-                
-
-                PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM demande_mobilites de, etudiants e"
-                        + " WHERE de.etudiant_id = e.id"
-                        + " AND de.id = ?;");
-                statement.setInt(1, object.getId()); // On assigne notre premiere inconnue dans la requête préparée : "?" à notre object.getId();
-                ResultSet result3 = statement.executeQuery(); // On exécute la requête
-        /*
-                Etudiant e = new Etudiant(); // On crée un objet programme
-                e.setId(result2.getInt("id")); // On lui récupère son ID
-                e.setNom(result2.getString("nom")); // Son intitulé
-                e.setPrenom(result2.getString("prenom")); // Son intitulé
-                e.setAdresseWeb(result2.getString("adresse_web")); // Son AdresseWeb
-                e.setNiveau(Integer.parseInt(result2.getString("niveau"))); // Son Niveau
-                e.setUniversite(Universite.getUnivByDiplome(diplome.getId()));
-                object.setDiplome(diplome);
-                // Enfin, on ajoute à notre Vector de retour notre objet
-                objects.add(object);*/
-            }
-        } catch(SQLException e) {
-            // Nothing
-        }
-        return objects;
-    }
-    /*
-    public static Vector<DemandeMobilite> getMobisByEtud(int num_etudiant){
+    public static Vector<DemandeMobilite> getMobisByEtud(int idEtudiant){
         Vector<DemandeMobilite> lesMobis = new Vector<DemandeMobilite>();// On va stocker tous nos objets récupérés dans un Vecteur
         Connection conn = dbUtils.connect(); // On se connecte à la base
         ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
                 + " WHERE etudiant_id = e.id"
                 + " AND de.diplome_id = d.id"
-                + " AND num_etudiant = "+ num_etudiant); // Récupérer les demandes de mobilités par Etudiant
+                + " AND e.id = "+ idEtudiant); // Récupérer les demandes de mobilités par Etudiant
         try{
             while(result.next()){
                 DemandeMobilite object = new DemandeMobilite();
                 object.setId(result.getInt("id"));
-                object.setEtudiant_id(result.getInt("etudiant_id"));
-                object.setNum_etudiant(result.getInt("num_etudiant"));
-                object.setDiplome_id(result.getInt("diplome_id"));
+                object.setIdEtudiant(result.getInt("etudiant_id"));
+                object.setNumEtudiant(result.getInt("num_etudiant"));
+                object.setIdDiplome(result.getInt("diplome_id"));
                 object.setIntituleDiplome(result.getString("intitule"));
-                object.setDate_depot(result.getDate("date_depot"));
-                object.setEtat(result.getString("etat").charAt(0));
+                object.setDate_depot(result.getString("date_depot"));
+                object.setEtat(result.getString("etat"));
                 lesMobis.add(object);
             }
         } catch(SQLException e) {
@@ -139,23 +110,23 @@ public class DemandeMobilite {
         }
         return lesMobis;
     }
-    public static Vector<DemandeMobilite> getMobisByDiplome(String intitule){
+    public static Vector<DemandeMobilite> getMobisByDiplome(int idD){
         Vector<DemandeMobilite> lesMobis = new Vector<DemandeMobilite>();// On va stocker tous nos objets récupérés dans un Vecteur
         Connection conn = dbUtils.connect(); // On se connecte à la base
         ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
                 + " WHERE etudiant_id = e.id"
                 + " AND de.diplome_id = d.id"
-                + " AND intitule = '"+ intitule +"';"); // Récupérer les demandes de mobilités par Diplômes
+                + " AND d.id = '"+ idD +"';"); // Récupérer les demandes de mobilités par Diplômes
         try{
             while(result.next()){
                 DemandeMobilite object = new DemandeMobilite();
                 object.setId(result.getInt("id"));
-                object.setEtudiant_id(result.getInt("etudiant_id"));
-                object.setNum_etudiant(result.getInt("num_etudiant"));
-                object.setDiplome_id(result.getInt("diplome_id"));
+                object.setIdEtudiant(result.getInt("etudiant_id"));
+                object.setNumEtudiant(result.getInt("num_etudiant"));
+                object.setIdDiplome(result.getInt("diplome_id"));
                 object.setIntituleDiplome(result.getString("intitule"));
-                object.setDate_depot(result.getDate("date_depot"));
-                object.setEtat(result.getString("etat").charAt(0));
+                object.setDate_depot(result.getString("date_depot"));
+                object.setEtat(result.getString("etat"));
                 lesMobis.add(object);
             }
         } catch(SQLException e) {
@@ -163,28 +134,50 @@ public class DemandeMobilite {
         }
         return lesMobis;
     }
-    public static Vector<DemandeMobilite> getMobisByUniv(String nom){
+    public static Vector<DemandeMobilite> getMobisByUniv(int id){
         Vector<DemandeMobilite> lesMobis = new Vector<DemandeMobilite>();// On va stocker tous nos objets récupérés dans un Vecteur
         Connection conn = dbUtils.connect(); // On se connecte à la base
-        ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, universites u, diplomes d"
+        ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, universites u, diplomes d, etudiants e"
                 + " WHERE de.diplome_id = d.id"
                 + " AND d.universite_id = u.id"
-                + " AND u.nom = '"+ nom +"';"); // Récupérer les demandes de mobilités par Universités
+                + " AND e.id = de.etudiant_id"
+                + " AND u.id = '"+ id +"';"); // Récupérer les demandes de mobilités par Universités
         try{
             while(result.next()){
                 DemandeMobilite object = new DemandeMobilite();
                 object.setId(result.getInt("id"));
-                object.setDiplome_id(result.getInt("diplome_id"));
+                object.setIdDiplome(result.getInt("diplome_id"));
                 object.setIntituleDiplome(result.getString("intitule"));
                 object.setNomUniv(result.getString("nom"));
-                object.setDate_depot(result.getDate("date_depot"));
-                object.setEtat(result.getString("etat").charAt(0));
+                object.setDate_depot(result.getString("date_depot"));
+                object.setEtat(result.getString("etat"));
+                object.setNumEtudiant(result.getInt("num_etudiant"));
                 lesMobis.add(object);
             }
         } catch(SQLException e) {
             // Nothing
         }
         return lesMobis;
-    }*/
-    
+    }
+    public boolean add(){
+        boolean add = false;
+        Connection conn = dbUtils.connect();
+        String sql = "INSERT INTO demande_mobilites VALUES(null, ?,?,?,?);";
+        
+        try{
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, this.idEtudiant);
+            prepared.setInt(2, this.idDiplome);
+            prepared.setString(3, this.date_depot);
+            prepared.setString(4, this.etat);
+            
+            int nbInsert = prepared.executeUpdate();
+            if(nbInsert > 0) add = true;
+            prepared.close();
+        }catch (SQLException ex){
+            add = false;
+        }
+        dbUtils.disconnect(conn);
+        return add;
+    }
 }
