@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>UniversitesController</servlet-name>
-        <servlet-class>Controllers.UniversitesController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>ProgrammesController</servlet-name>
         <servlet-class>Controllers.ProgrammesController</servlet-class>
     </servlet>
@@ -12,10 +8,6 @@
         <servlet-name>FinancieresController</servlet-name>
         <servlet-class>Controllers.FinancieresController</servlet-class>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>UniversitesController</servlet-name>
-        <url-pattern>/universites</url-pattern>
-    </servlet-mapping>
     <servlet>
         <servlet-name>MobilitesController</servlet-name>
         <servlet-class>Controllers.MobilitesController</servlet-class>

@@ -35,18 +35,22 @@ public class ProgrammesController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         // La session
         HttpSession session = request.getSession();
-        
+
         // Le dispatcher de requetes
         RequestDispatcher rd = null;
-        
+
         String action = request.getParameter("action"); // On récupère l'action passée en GET ou POST
-        if(action != null && !action.isEmpty()) { // Si on est sûr que l'action a bien été passée
-            switch(action.toUpperCase()) { // On passe en majuscule pour ignorer la casse
-                case "SEARCH":                    
+        if (action != null && !action.isEmpty()) { // Si on est sûr que l'action a bien été passée
+            switch (action.toUpperCase()) { // On passe en majuscule pour ignorer la casse
+                case "SEARCH":
                     request.setAttribute("programmes", Programme.getAll());
                     ControllerUtilsInterface.redirectTo("/search_programmes.jsp", request, response);
+                    if (request.getParameter("intitule") != null) {
+                        int idP = Integer.parseInt(request.getParameter("intitule"));
+                        request.setAttribute("programmes_contrats", Contrat.getContratsByProgrammes(idP));
+                    }
                     break;
-                case "LISTE_PROGRAMME_CONTRAT":          
+                case "LISTE_PROGRAMME_CONTRAT":
                     int idP = Integer.parseInt(request.getParameter("intitule"));
                     request.setAttribute("programmes", Programme.getAll());
                     request.setAttribute("programmes_contrats", Contrat.getContratsByProgrammes(idP));

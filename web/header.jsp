@@ -19,8 +19,8 @@
     </head>
     <body>
         <div id="menu-handler">
-            <nav class="navbar navbar-expand-md fixed-top navbar-light bg-light">
-                <a class="navbar-brand" href="#">MobiStudent</a>
+            <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-primary">
+                <a class="navbar-brand" href="index.jsp">MobiStudent</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -29,11 +29,8 @@
                         <li class="nav-item <%=ControllerUtilsInterface.active(request, "index", null)%>">
                             <a class="nav-link" href="index.jsp">Accueil</a>
                         </li>
-                        <li class="nav-item <%=ControllerUtilsInterface.active(request, "liste_universites", "liste")%>">
-                            <a class="nav-link" href="./universites?action=liste">Liste des universités</a>
-                        </li>
                         <li class="nav-item <%=ControllerUtilsInterface.active(request, "search_mobilites", "search")%>">
-                            <a class="nav-link" href="./mobilites?action=search">Afficher les mobilités</a>
+                            <a class="nav-link" href="./mobilites?action=search">Demandes de mobilités</a>
                         </li>
                         <li class="nav-item <%=ControllerUtilsInterface.active(request, "search_programmes", "search")%>">
                             <a class="nav-link" href="./programmes?action=search">Programmes & Contrats</a>
@@ -41,17 +38,8 @@
                         <li class="nav-item <%=ControllerUtilsInterface.active(request, "addMobi", "add")%>">
                             <a class="nav-link" href="./mobilites?action=add">Ajouter une Demande de Mobilités</a>
                         </li>
-                        <li class="nav-item <%=ControllerUtilsInterface.active(request, "demandes_diplomes", "SEARCH_DEMANDES_MOBILITES_DIPLOMES")%>">
-                            <a class="nav-link" href="./mobilites?action=SEARCH_DEMANDES_MOBILITES_DIPLOMES">Demandes Mobilités par Diplôme</a>
-                        </li>
-                        <li class="nav-item <%=ControllerUtilsInterface.active(request, "demandes_etudiants", "SEARCH_DEMANDES_MOBILITES_ETUDIANTS")%>">
-                            <a class="nav-link" href="./mobilites?action=SEARCH_DEMANDES_MOBILITES_ETUDIANTS">Demandes Mobilités par Etudiant</a>
-                        </li>
-                        <li class="nav-item <%=ControllerUtilsInterface.active(request, "demandes_universites", "SEARCH_DEMANDES_MOBILITES_UNIVERSITES")%>">
-                            <a class="nav-link" href="./mobilites?action=SEARCH_DEMANDES_MOBILITES_UNIVERSITES">Demandes Mobilités par Universités</a>
-                        </li>
                         <li class="nav-item <%=ControllerUtilsInterface.active(request, "search_financieres", "search")%>">
-                            <a class="nav-link" href="./financieres?action=SEARCH">Demandes Financieres par Contrats</a>
+                            <a class="nav-link" href="./financieres?action=SEARCH">Demandes Financieres</a>
                         </li>
                         <li class="nav-item <%=ControllerUtilsInterface.active(request, "addFin", "add")%>">
                             <a class="nav-link" href="./financieres?action=add">Ajouter une Demande Financière</a>

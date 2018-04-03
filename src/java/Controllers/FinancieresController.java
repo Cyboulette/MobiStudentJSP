@@ -47,22 +47,14 @@ public class FinancieresController extends HttpServlet {
                 case "SEARCH":
                     request.setAttribute("contrats", Contrat.getAll());
                     request.setAttribute("programmes", Programme.getAll());
-                    ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
-                    break;
-                case "DEMANDES_FINANCIERES":
                     if (request.getParameter("contrat_id") != null) {
                         int contrat_id = Integer.parseInt(request.getParameter("contrat_id"));
-                        request.setAttribute("contrats", Contrat.getAll());
-                        request.setAttribute("programmes", Programme.getAll());
                         request.setAttribute("financieres", DemandeFinanciere.getDemandeFiByContrat(contrat_id));
-                        ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
                     } else if (request.getParameter("programme_id") != null) {
                         int programme_id = Integer.parseInt(request.getParameter("programme_id"));
-                        request.setAttribute("programmes", Programme.getAll());
-                        request.setAttribute("contrats", Contrat.getAll());
                         request.setAttribute("financieres", DemandeFinanciere.getDemandeFiByProg(programme_id));
-                        ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
                     }
+                    ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
                     break;
                 case "ADD":
                     request.setAttribute("contrats", Contrat.getAll());

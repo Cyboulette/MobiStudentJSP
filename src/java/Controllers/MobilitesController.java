@@ -44,37 +44,20 @@ public class MobilitesController extends HttpServlet {
                 case "SEARCH":
                     request.setAttribute("etudiants", Etudiant.getAll());
                     request.setAttribute("universites", Universite.getAll());
+                    request.setAttribute("diplomes", Diplome.getAll());
+                    if(request.getParameter("id_etudiant") != null){
+                        int idE = Integer.parseInt(request.getParameter("id_etudiant"));
+                        request.setAttribute("demandes", DemandeMobilite.getMobisByEtud(idE));                       
+                    }
+                    else if(request.getParameter("num_univ") != null){
+                        int id = Integer.parseInt(request.getParameter("num_univ"));
+                        request.setAttribute("demandes", DemandeMobilite.getMobisByUniv(id));                       
+                    }
+                    else if(request.getParameter("id_diplome") != null){
+                        int idD = Integer.parseInt(request.getParameter("id_diplome"));
+                        request.setAttribute("demandes", DemandeMobilite.getMobisByDiplome(idD));                        
+                    }
                     ControllerUtilsInterface.redirectTo("/search_mobilites.jsp", request, response);
-                    break;
-                case "SEARCH_DEMANDES_MOBILITES_ETUDIANTS":
-                    request.setAttribute("etudiants", Etudiant.getAll());
-                    ControllerUtilsInterface.redirectTo("/demandes_etudiants.jsp", request, response);
-                    break;
-                case "DEMANDES_MOBILITES_ETUDIANTS":
-                    int idE = Integer.parseInt(request.getParameter("id_etudiant"));
-                    request.setAttribute("etudiants", Etudiant.getAll());
-                    request.setAttribute("demandes", DemandeMobilite.getMobisByEtud(idE));
-                    ControllerUtilsInterface.redirectTo("/demandes_etudiants.jsp", request, response);
-                    break;
-                case "SEARCH_DEMANDES_MOBILITES_UNIVERSITES":
-                    request.setAttribute("universites", Universite.getAll());
-                    ControllerUtilsInterface.redirectTo("/demandes_universites.jsp", request, response);
-                    break;
-                case "DEMANDES_MOBILITES_UNIVERSITES":
-                    int id = Integer.parseInt(request.getParameter("num_univ"));
-                    request.setAttribute("universites", Universite.getAll());
-                    request.setAttribute("demandes", DemandeMobilite.getMobisByUniv(id));
-                    ControllerUtilsInterface.redirectTo("/demandes_universites.jsp", request, response);
-                    break;
-                case "SEARCH_DEMANDES_MOBILITES_DIPLOMES":
-                    request.setAttribute("diplomes", Diplome.getAll());
-                    ControllerUtilsInterface.redirectTo("/demandes_diplomes.jsp", request, response);
-                    break;
-                case "DEMANDES_MOBILITES_DIPLOMES":
-                    int idD = Integer.parseInt(request.getParameter("id_diplome"));
-                    request.setAttribute("diplomes", Diplome.getAll());
-                    request.setAttribute("demandes", DemandeMobilite.getMobisByDiplome(idD));
-                    ControllerUtilsInterface.redirectTo("/demandes_diplomes.jsp", request, response);
                     break;
                 case "ADD":
                     request.setAttribute("etudiants", Etudiant.getAll());
