@@ -26,7 +26,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item <%=ControllerUtilsInterface.active(request, "index", null)%>">
+                        <li class="nav-item <%=ControllerUtilsInterface.active(request, "index", null)%> <%=ControllerUtilsInterface.active(request, "", null)%>">
                             <a class="nav-link" href="index.jsp">Accueil</a>
                         </li>
                         <li class="nav-item <%=ControllerUtilsInterface.active(request, "search_mobilites", "search")%>">
@@ -49,3 +49,20 @@
             </nav>
         </div>
         <div class="container">
+            <% if (request.getAttribute("success") != null || request.getAttribute("error") != null) { 
+                String contenuMessage = "", classMessage = "";
+                if(request.getAttribute("success") != null) {
+                    contenuMessage = (String)request.getAttribute("success");
+                    classMessage = "info";
+                }
+                if(request.getAttribute("error") != null) {
+                    contenuMessage = (String)request.getAttribute("error");
+                    classMessage = "danger";
+                }
+            %>
+            <div class="row">    
+                <div class="col-12">
+                    <div class="alert alert-<%=classMessage%>"><%=contenuMessage%></div>
+                </div>
+            </div>
+            <% } %>

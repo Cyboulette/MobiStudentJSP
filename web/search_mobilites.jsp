@@ -6,14 +6,14 @@
     <div class="col-3">
 
         <div class="nav flex-column nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <a class="nav-link active" id="v-pills-diplomes-tab" data-toggle="pill" href="#v-pills-diplomes" role="tab" aria-controls="v-pills-diplomes" aria-selected="true">Diplômes</a>
-            <a class="nav-link" id="v-pills-etudiants-tab" data-toggle="pill" href="#v-pills-etudiants" role="tab" aria-controls="v-pills-etudiants" aria-selected="false">Étudiants</a>
-            <a class="nav-link" id="v-pills-universites-tab" data-toggle="pill" href="#v-pills-universites" role="tab" aria-controls="v-pills-universites" aria-selected="false">Universités</a>
+            <a class="nav-link <%=ControllerUtilsInterface.activeTab(request, "v-pills-diplomes")%>" id="v-pills-diplomes-tab" data-toggle="pill" href="#v-pills-diplomes" role="tab" aria-controls="v-pills-diplomes" aria-selected="true">Diplômes</a>
+            <a class="nav-link <%=ControllerUtilsInterface.activeTab(request, "v-pills-etudiants")%>" id="v-pills-etudiants-tab" data-toggle="pill" href="#v-pills-etudiants" role="tab" aria-controls="v-pills-etudiants" aria-selected="false">Étudiants</a>
+            <a class="nav-link <%=ControllerUtilsInterface.activeTab(request, "v-pills-universites")%>" id="v-pills-universites-tab" data-toggle="pill" href="#v-pills-universites" role="tab" aria-controls="v-pills-universites" aria-selected="false">Universités</a>
         </div>
     </div>
     <div class="col-9">
         <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-diplomes" role="tabpanel" aria-labelledby="v-pills-diplomes-tab">
+            <div class="tab-pane fade <%=ControllerUtilsInterface.activeTab(request, "v-pills-diplomes")%>" id="v-pills-diplomes" role="tabpanel" aria-labelledby="v-pills-diplomes-tab">
                 <form class="form-group my-4 my-lg-0" method="POST" action="mobilites">
                     <input class="form-control mr-sm-2" type="hidden" name="action" value="search">
                     <label for="id_diplome">Rechercher par Diplôme</label>
@@ -34,7 +34,7 @@
                     </div>
                 </form>       
             </div>
-            <div class="tab-pane fade" id="v-pills-etudiants" role="tabpanel" aria-labelledby="v-pills-etudiants-tab">
+            <div class="tab-pane fade <%=ControllerUtilsInterface.activeTab(request, "v-pills-etudiants")%>" id="v-pills-etudiants" role="tabpanel" aria-labelledby="v-pills-etudiants-tab">
                 <form class="form-group my-4 my-lg-0" method="POST" action="mobilites">
                     <input class="form-control mr-sm-2" type="hidden" name="action" value="search">
                     <label for="id_etudiant">Rechercher par Étudiant</label>
@@ -55,7 +55,7 @@
                     </div>
                 </form>       
             </div>
-            <div class="tab-pane fade" id="v-pills-universites" role="tabpanel" aria-labelledby="v-pills-universites-tab">
+            <div class="tab-pane fade <%=ControllerUtilsInterface.activeTab(request, "v-pills-universites")%>" id="v-pills-universites" role="tabpanel" aria-labelledby="v-pills-universites-tab">
                 <form class="form-group my-4 my-lg-0" method="POST" action="mobilites">
                     <input class="form-control mr-sm-2" type="hidden" name="action" value="search">
                     <label for="num_univ">Rechercher par Université</label>

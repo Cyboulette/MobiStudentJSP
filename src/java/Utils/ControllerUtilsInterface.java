@@ -32,4 +32,12 @@ public class ControllerUtilsInterface {
         }
         return (isActive?"active":"");
     }
+    
+    public static String activeTab(HttpServletRequest request, String tabToMatch) {
+        boolean isActive = false;
+        if(request.getAttribute("tabActive") != null) {
+            isActive = ((String)request.getAttribute("tabActive")).equalsIgnoreCase(tabToMatch);
+        }
+        return (isActive?"show active":"");
+    }
 }

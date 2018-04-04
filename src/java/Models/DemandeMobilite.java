@@ -21,6 +21,8 @@ public class DemandeMobilite {
     private int idDiplome;
     private String intituleDiplome;
     private String nomUniv;
+    
+    public static String[] etats = new String[]{"En attente", "En cours d'examen", "Acceptée", "Refusée", "Archivée"};
 
     public int getId() {
         return id;

@@ -42,20 +42,28 @@ public class MobilitesController extends HttpServlet {
         if (action != null && !action.isEmpty()) { // Si on est sûr que l'action a bien été passée
             switch (action.toUpperCase()) { // On passe en majuscule pour ignorer la casse
                 case "SEARCH":
+                    // On récupérer tous les étudiants, toutes les universités et tous les diplômes
                     request.setAttribute("etudiants", Etudiant.getAll());
                     request.setAttribute("universites", Universite.getAll());
                     request.setAttribute("diplomes", Diplome.getAll());
-                    if(request.getParameter("id_etudiant") != null){
+                    
+                    request.setAttribute("tabActive", "v-pills-diplomes"); // Par défaut la tab active c'est diplômes
+                    
+                    // Si on passe un id_etudiant, on recherche les demandes par etudiant
+                    if(request.getParameter("id_etudiant") != null && !request.getParameter("id_etudiant").equalsIgnoreCase("null")){
                         int idE = Integer.parseInt(request.getParameter("id_etudiant"));
-                        request.setAttribute("demandes", DemandeMobilite.getMobisByEtud(idE));                       
-                    }
-                    else if(request.getParameter("num_univ") != null){
+                        request.setAttribute("demandes", DemandeMobilite.getMobisByEtud(idE));
+                        request.setAttribute("tabActive", "v-pills-etudiants");
+                    } // Si on passe un num_univ, on recherche les demandes par université
+                    else if(request.getParameter("num_univ") != null && !request.getParameter("num_univ").equalsIgnoreCase("null")){
                         int id = Integer.parseInt(request.getParameter("num_univ"));
-                        request.setAttribute("demandes", DemandeMobilite.getMobisByUniv(id));                       
-                    }
-                    else if(request.getParameter("id_diplome") != null){
+                        request.setAttribute("demandes", DemandeMobilite.getMobisByUniv(id));
+                        request.setAttribute("tabActive", "v-pills-universites");
+                    } // Si on passe un id_diplome, on recherche les demandes par diplôme
+                    else if(request.getParameter("id_diplome") != null && !request.getParameter("id_diplome").equalsIgnoreCase("null")){
                         int idD = Integer.parseInt(request.getParameter("id_diplome"));
-                        request.setAttribute("demandes", DemandeMobilite.getMobisByDiplome(idD));                        
+                        request.setAttribute("demandes", DemandeMobilite.getMobisByDiplome(idD));
+                        request.setAttribute("tabActive", "v-pills-diplomes");
                     }
                     ControllerUtilsInterface.redirectTo("/search_mobilites.jsp", request, response);
                     break;
@@ -72,13 +80,16 @@ public class MobilitesController extends HttpServlet {
                     mobilite.setEtat(request.getParameter("etat"));
                     boolean ajout = mobilite.add();
                     if (ajout) {
-                        session.setAttribute("message", "ok");
-                        session.setAttribute("mobilite", mobilite);
+                        request.setAttribute("success", "Votre demande de mobilité a bien été ajoutée");
+                        request.setAttribute("mobilite", mobilite);
+                        request.setAttribute("etudiants", Etudiant.getAll());
+                        request.setAttribute("universites", Universite.getAll());
                         request.setAttribute("diplomes", Diplome.getAll());
+                        request.setAttribute("tabActive", "v-pills-diplomes"); // Par défaut la tab active c'est diplômes
 
-                        ControllerUtilsInterface.redirectTo("/demandes_diplomes.jsp", request, response);
+                        ControllerUtilsInterface.redirectTo("/search_mobilites.jsp", request, response);
                     } else {
-                        session.setAttribute("error", "Erreur dans l'ajout");
+                        request.setAttribute("error", "Erreur dans l'ajout de votre demande de mobilité, contactez un administrateur");
                         ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
                     }
                     break;
