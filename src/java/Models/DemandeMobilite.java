@@ -88,6 +88,31 @@ public class DemandeMobilite {
         this.nomUniv = nomUniv;
     }
     
+    public static DemandeMobilite getMobiById(int idM){
+        DemandeMobilite mobilite = null;
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
+                + " WHERE etudiant_id = e.id"
+                + " AND de.diplome_id = d.id"
+                + " AND de.id = "+ idM); // Récupérer les demandes de mobilités par ID
+        try{
+            while(result.next()){
+                mobilite = new DemandeMobilite();
+                mobilite.setId(result.getInt("id"));
+                mobilite.setIdEtudiant(result.getInt("etudiant_id"));
+                mobilite.setNumEtudiant(result.getInt("num_etudiant"));
+                mobilite.setIdDiplome(result.getInt("diplome_id"));
+                mobilite.setIntituleDiplome(result.getString("intitule"));
+                mobilite.setDate_depot(result.getString("date_depot"));
+                mobilite.setEtat(result.getString("etat"));
+            }
+        } catch(SQLException e) {
+            // Nothing
+        }
+        
+        return mobilite;
+    }
+    
     public static Vector<DemandeMobilite> getMobisByEtud(int idEtudiant){
         Vector<DemandeMobilite> lesMobis = new Vector<DemandeMobilite>();// On va stocker tous nos objets récupérés dans un Vecteur
         Connection conn = dbUtils.connect(); // On se connecte à la base
@@ -112,6 +137,7 @@ public class DemandeMobilite {
         }
         return lesMobis;
     }
+    
     public static Vector<DemandeMobilite> getMobisByDiplome(int idD){
         Vector<DemandeMobilite> lesMobis = new Vector<DemandeMobilite>();// On va stocker tous nos objets récupérés dans un Vecteur
         Connection conn = dbUtils.connect(); // On se connecte à la base
@@ -161,7 +187,8 @@ public class DemandeMobilite {
         }
         return lesMobis;
     }
-    public boolean add(){
+    
+    public boolean add() {
         boolean add = false;
         Connection conn = dbUtils.connect();
         String sql = "INSERT INTO demande_mobilites VALUES(null, ?,?,?,?);";
@@ -181,5 +208,47 @@ public class DemandeMobilite {
         }
         dbUtils.disconnect(conn);
         return add;
+    }
+    
+    public boolean edit() {
+        boolean edit = false;
+        Connection conn = dbUtils.connect();
+        String sql = "UPDATE demande_mobilites SET etudiant_id = ?, diplome_id = ?, etat = ? WHERE id = ?;";
+        
+        try {
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, this.idEtudiant);
+            prepared.setInt(2, this.idDiplome);
+            prepared.setString(3, this.etat);
+            prepared.setInt(4, this.id);
+            
+            int nbUpdate = prepared.executeUpdate();
+            if(nbUpdate > 0) edit = true;
+            prepared.close();
+        } catch (SQLException ex) {
+            edit = false;
+        }
+        dbUtils.disconnect(conn);
+        return edit;
+    }
+    
+    public boolean delete() {
+        boolean delete = false;
+        Connection conn = dbUtils.connect();
+        
+        String sql = "DELETE FROM demande_mobilites WHERE id = ?";
+        
+        try {
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, this.id);
+            
+            int nbDelete = prepared.executeUpdate();
+            if(nbDelete > 0) delete = true;
+            prepared.close();
+        } catch (SQLException ex) {
+            delete = false;
+        }
+        dbUtils.disconnect(conn);
+        return delete;
     }
 }

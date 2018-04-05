@@ -32,6 +32,7 @@ public class MobilitesController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         // La session
         HttpSession session = request.getSession();
 
@@ -90,6 +91,74 @@ public class MobilitesController extends HttpServlet {
                         ControllerUtilsInterface.redirectTo("/search_mobilites.jsp", request, response);
                     } else {
                         request.setAttribute("error", "Erreur dans l'ajout de votre demande de mobilité, contactez un administrateur");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    }
+                    break;
+                case "EDIT":
+                    int idM = Integer.parseInt(request.getParameter("id"));
+                    DemandeMobilite demandeMobilite = DemandeMobilite.getMobiById(idM);
+                    if(demandeMobilite == null) {
+                        request.setAttribute("error", "Cette demande de mobilité n'existe pas");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    } else {
+                        request.setAttribute("mobilite", demandeMobilite);
+                        request.setAttribute("etudiants", Etudiant.getAll());
+                        request.setAttribute("diplomes", Diplome.getAll());
+                        ControllerUtilsInterface.redirectTo("/editMobi.jsp", request, response);
+                    }
+                    break;
+                case "EDIT_MOBILITE":
+                    if(request.getParameter("idM") != null) {
+                        idM = Integer.parseInt(request.getParameter("idM"));
+                        demandeMobilite = DemandeMobilite.getMobiById(idM);
+                        if(demandeMobilite == null) {
+                            request.setAttribute("error", "Cette demande de mobilité n'existe pas");
+                            ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                        } else {
+                            demandeMobilite.setIdDiplome(Integer.parseInt(request.getParameter("id_Diplome")));
+                            demandeMobilite.setIdEtudiant(Integer.parseInt(request.getParameter("id_Etudiant")));
+                            demandeMobilite.setEtat(request.getParameter("etat"));
+                            boolean edit = demandeMobilite.edit();
+                            if(edit) {
+                                request.setAttribute("success", "Cette demande de mobilité a bien été modifiée");
+                            } else {
+                                request.setAttribute("error", "Impossible de modifier cette demande de mobilité");
+                            }
+                            
+                            request.setAttribute("mobilite", demandeMobilite);
+                            request.setAttribute("etudiants", Etudiant.getAll());
+                            request.setAttribute("diplomes", Diplome.getAll());
+                            ControllerUtilsInterface.redirectTo("/editMobi.jsp", request, response);
+                        }
+                    } else {
+                        request.setAttribute("error", "Vous devez préciser un id de demande de mobilité");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    }
+                    break;
+                case "DELETE":
+                    idM = Integer.parseInt(request.getParameter("id"));
+                    demandeMobilite = DemandeMobilite.getMobiById(idM);
+                    if(demandeMobilite == null) {
+                        request.setAttribute("error", "Cette demande de mobilité n'existe pas");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    } else {
+                        request.setAttribute("mobilite", demandeMobilite);
+                        ControllerUtilsInterface.redirectTo("/deleteMobi.jsp", request, response);
+                    }
+                    break;
+                case "DELETE_MOBILITE":
+                    idM = Integer.parseInt(request.getParameter("idM"));
+                    demandeMobilite = DemandeMobilite.getMobiById(idM);
+                    if(demandeMobilite == null) {
+                        request.setAttribute("error", "Cette demande de mobilité n'existe pas");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    } else {
+                        boolean delete = demandeMobilite.delete();
+                        if(delete) {
+                            request.setAttribute("success", "Demande de mobilité supprimée avec succès");
+                        } else {
+                            request.setAttribute("error", "Impossible de supprimer cette demande de mobilité");
+                        }
                         ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
                     }
                     break;

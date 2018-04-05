@@ -19,7 +19,7 @@ public class dbUtils {
         Connection c = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            c = DriverManager.getConnection("jdbc:mysql://localhost:3306/mobi_student", "root", "");
+            c = DriverManager.getConnection("jdbc:mysql://localhost:3306/mobi_student?useUnicode=yes&characterEncoding=UTF-8", "root", "");
         } catch(Exception e) {
             // TODO
         }
@@ -46,16 +46,5 @@ public class dbUtils {
         }
         
         return result;
-    }
-    
-    public static void update(Connection conn, String querySQL) {
-        ResultSet result = null;
-        try {
-            Statement statement = conn.createStatement();
-            statement.executeUpdate(querySQL);
-            statement.close();
-        } catch (SQLException ex) {
-            // TODO
-        }
     }
 }

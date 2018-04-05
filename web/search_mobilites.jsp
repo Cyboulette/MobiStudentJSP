@@ -92,6 +92,7 @@
     <th>Diplome</th>
     <th>Date Depot</th>
     <th>Etat</th>
+    <th>Action</th>
 </thead>
 <tbody>
     <%
@@ -102,6 +103,7 @@
             out.print("<td>" + dem.getIntituleDiplome() + "</td>");
             out.print("<td>" + dem.getDate_depot() + "</td>");
             out.print("<td>" + dem.getEtat() + "</td>");
+            out.print("<td><a href='mobilites?action=edit&id="+dem.getId()+"' class='mr-2 text-primary'><i class='fas fa-pencil-alt'></i></a> <a class='text-danger' href='mobilites?action=delete&id="+dem.getId()+"'><i class='fas fa-trash'></i></a></td>");
             out.print("</tr>");
         }
     %>
