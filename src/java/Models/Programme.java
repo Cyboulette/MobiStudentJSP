@@ -64,6 +64,25 @@ public class Programme {
         return objects;
     }
     
+    public static Programme getProgrammeById(int idP){
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        Programme programme = null;
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM programmes p WHERE p.id = ?");
+            statement.setInt(1, idP);
+            ResultSet result = statement.executeQuery();
+            while(result.next()) {  
+                programme = new Programme();
+                programme.setId(result.getInt("id")); // On lui assigne son ID
+                programme.setIntitule(result.getString("intitule")); // Sa date de dépôt
+                programme.setExplication(result.getString("explication")); // Son État
+            }    
+        } catch(SQLException e) {
+            // Nothing
+        }
+        return programme;
+    }
+    
     public static Vector<Programme> getProgrammesByContrat(int idC){
         Vector<Programme> objects = new Vector<Programme>(); 
         Connection conn = dbUtils.connect(); // On se connecte à la base

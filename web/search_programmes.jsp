@@ -25,8 +25,9 @@
 <%
     if (request.getAttribute("programmes_contrats") != null) {
         Vector<Contrat> contrats = (Vector<Contrat>) request.getAttribute("programmes_contrats");
+        Programme programme = (Programme) request.getAttribute("programme");
         out.print("<h2> Programmes et Contrats Associés</h2>");
-        out.print("<p> Liste des contrats selon le programme : "+ contrats.get(1).getIntituleP() +"</p>");
+        out.print("<p> Liste des contrats selon le programme : "+ programme.getIntitule() +"</p>");
 %>
 <table class="table table-bordered table-hover">
     <thead>

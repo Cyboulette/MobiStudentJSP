@@ -45,15 +45,16 @@ public class ProgrammesController extends HttpServlet {
                 case "SEARCH":
                     request.setAttribute("programmes", Programme.getAll());
                     ControllerUtilsInterface.redirectTo("/search_programmes.jsp", request, response);
-                    if (request.getParameter("intitule") != null) {
+                    /*if (request.getParameter("intitule") != null) {
                         int idP = Integer.parseInt(request.getParameter("intitule"));
                         request.setAttribute("programmes_contrats", Contrat.getContratsByProgrammes(idP));
-                    }
+                    }*/
                     break;
                 case "LISTE_PROGRAMME_CONTRAT":
                     int idP = Integer.parseInt(request.getParameter("intitule"));
                     request.setAttribute("programmes", Programme.getAll());
                     request.setAttribute("programmes_contrats", Contrat.getContratsByProgrammes(idP));
+                    request.setAttribute("programme", Programme.getProgrammeById(idP));
                     ControllerUtilsInterface.redirectTo("/search_programmes.jsp", request, response);
                     break;
                 default:
