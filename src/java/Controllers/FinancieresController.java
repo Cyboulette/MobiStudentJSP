@@ -35,6 +35,7 @@ public class FinancieresController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
 // La session
         HttpSession session = request.getSession();
 
@@ -46,13 +47,9 @@ public class FinancieresController extends HttpServlet {
             switch (action.toUpperCase()) { // On passe en majuscule pour ignorer la casse
                 case "SEARCH":
                     request.setAttribute("contrats", Contrat.getAll());
-                    request.setAttribute("programmes", Programme.getAll());
                     if (request.getParameter("contrat_id") != null) {
                         int contrat_id = Integer.parseInt(request.getParameter("contrat_id"));
                         request.setAttribute("financieres", DemandeFinanciere.getDemandeFiByContrat(contrat_id));
-                    } else if (request.getParameter("programme_id") != null) {
-                        int programme_id = Integer.parseInt(request.getParameter("programme_id"));
-                        request.setAttribute("financieres", DemandeFinanciere.getDemandeFiByProg(programme_id));
                     }
                     ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
                     break;
@@ -68,13 +65,79 @@ public class FinancieresController extends HttpServlet {
                     fin.setMontant_accorde(Double.parseDouble(request.getParameter("montant_accorde")));
                     boolean ajout = fin.add();
                     if (ajout) {
-                        session.setAttribute("message", "ok");
+                        request.setAttribute("success", "La demande financière a bien été ajoutée");
                         request.setAttribute("contrats", Contrat.getAll());
-                        request.setAttribute("programmes", Programme.getAll());
                         ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
                     } else {
-                        session.setAttribute("error", "Erreur dans l'ajout");
+                        request.setAttribute("error", "Erreur dans l'ajout");
                         ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    }
+                    break;
+                case "EDIT":
+                    int idF = Integer.parseInt(request.getParameter("id"));
+                    DemandeFinanciere demandeFinanciere = DemandeFinanciere.getDemandeFiById(idF);
+                    if(demandeFinanciere == null) {
+                        request.setAttribute("error", "Cette demande financière n'existe pas");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    } else {
+                        request.setAttribute("financiere", demandeFinanciere);
+                        request.setAttribute("contrats", Contrat.getAll());
+                        ControllerUtilsInterface.redirectTo("/editFin.jsp", request, response);
+                    }
+                    break;
+                case "EDIT_FINANCIERE":
+                    if(request.getParameter("idF") != null) {
+                        idF = Integer.parseInt(request.getParameter("idF"));
+                        demandeFinanciere = DemandeFinanciere.getDemandeFiById(idF);
+                        if(demandeFinanciere == null) {
+                            request.setAttribute("error", "Cette demande financière n'existe pas");
+                            ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                        } else {
+                            demandeFinanciere.setIdContrat(Integer.parseInt(request.getParameter("contrat_id")));
+                            demandeFinanciere.setEtat(request.getParameter("etat"));
+                            demandeFinanciere.setMontant_accorde(Double.parseDouble(request.getParameter("montant_accorde")));
+                            boolean edit = demandeFinanciere.edit();
+                            if(edit) {
+                                request.setAttribute("success", "Cette demande financière a bien été modifiée");
+                            } else {
+                                request.setAttribute("error", "Impossible de modifier cette demande financière");
+                            }
+                            
+                            request.setAttribute("financiere", demandeFinanciere);
+                            request.setAttribute("contrats", Contrat.getAll());
+                            ControllerUtilsInterface.redirectTo("/editFin.jsp", request, response);
+                        }
+                    } else {
+                        request.setAttribute("error", "Vous devez préciser un id de demande financière");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    }
+                    break;
+                case "DELETE":
+                    idF = Integer.parseInt(request.getParameter("id"));
+                    demandeFinanciere = DemandeFinanciere.getDemandeFiById(idF);
+                    if(demandeFinanciere == null) {
+                        request.setAttribute("error", "Cette demande financière n'existe pas");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    } else {
+                        request.setAttribute("financiere", demandeFinanciere);
+                        ControllerUtilsInterface.redirectTo("/deleteFin.jsp", request, response);
+                    }
+                    break;
+                case "DELETE_FINANCIERE":
+                    idF = Integer.parseInt(request.getParameter("idF"));
+                    demandeFinanciere = DemandeFinanciere.getDemandeFiById(idF);
+                    if(demandeFinanciere == null) {
+                        request.setAttribute("error", "Cette demande financière n'existe pas");
+                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                    } else {
+                        boolean delete = demandeFinanciere.delete();
+                        if(delete) {
+                            request.setAttribute("success", "Demande financière supprimée avec succès");
+                        } else {
+                            request.setAttribute("error", "Impossible de supprimer cette demande financière");
+                        }
+                        request.setAttribute("contrats", Contrat.getAll());
+                        ControllerUtilsInterface.redirectTo("/search_financieres.jsp", request, response);
                     }
                     break;
                 default:

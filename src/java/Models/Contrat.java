@@ -98,6 +98,7 @@ public class Contrat {
 
         return objects;
     }
+    
     public static Vector<Contrat> getAll(){
         Vector<Contrat> objects = new Vector<Contrat>(); // On va stocker tous nos objets récupérés dans un Vecteur
         
@@ -109,10 +110,10 @@ public class Contrat {
             
             while(result.next()) {
                 Contrat object = new Contrat(); // On crée notre objet
-                object.setId(result.getInt("id")); // On lui assigne son ID
-                object.setDuree(result.getInt("duree"));
-                object.setEtat(result.getString("etat"));
-                object.setOrdre(result.getString("ordre"));
+                object.setId(result.getInt("c.id")); // On lui assigne son ID
+                object.setDuree(result.getInt("c.duree"));
+                object.setEtat(result.getString("c.etat"));
+                object.setOrdre(result.getString("c.ordre"));
                 object.setIntituleD(result.getString("d.intitule"));
                 object.setIntituleP(result.getString("p.intitule"));
                 objects.add(object);

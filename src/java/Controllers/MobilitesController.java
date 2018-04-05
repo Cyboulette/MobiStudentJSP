@@ -159,7 +159,11 @@ public class MobilitesController extends HttpServlet {
                         } else {
                             request.setAttribute("error", "Impossible de supprimer cette demande de mobilité");
                         }
-                        ControllerUtilsInterface.redirectTo("/index.jsp", request, response);
+                        request.setAttribute("etudiants", Etudiant.getAll());
+                        request.setAttribute("universites", Universite.getAll());
+                        request.setAttribute("diplomes", Diplome.getAll());
+                        request.setAttribute("tabActive", "v-pills-diplomes"); // Par défaut la tab active c'est diplômes
+                        ControllerUtilsInterface.redirectTo("/search_mobilites.jsp", request, response);
                     }
                     break;
                 default:

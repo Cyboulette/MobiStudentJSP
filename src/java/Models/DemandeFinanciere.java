@@ -20,6 +20,8 @@ public class DemandeFinanciere {
     private String etat;
     private double montant_accorde;
     private int idContrat;
+    
+    public static String[] etats = new String[]{"En attente", "En cours d'examen", "Acceptée", "Refusée", "Archivée"};
 
     public int getId() {
         return id;
@@ -59,6 +61,28 @@ public class DemandeFinanciere {
 
     public void setIdContrat(int id) {
         this.idContrat = id;
+    }
+    
+    public static DemandeFinanciere getDemandeFiById(int idC){
+        DemandeFinanciere demandeFi = null;
+        Connection conn = dbUtils.connect(); // On se connecte à la base
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_financieres d"
+                            + " WHERE d.id = ?");
+            statement.setInt(1, idC);
+            ResultSet result = statement.executeQuery();
+            while(result.next()) {                
+                demandeFi = new DemandeFinanciere();
+                demandeFi.setId(result.getInt("id")); // On lui assigne son ID
+                demandeFi.setDate_depot(result.getString("date_depot")); // Sa date de dépôt
+                demandeFi.setEtat(result.getString("etat")); // Son État
+                demandeFi.setMontant_accorde(result.getDouble("montant_accorde")); // Son montant
+                demandeFi.setIdContrat(result.getInt("contrat_id"));  
+            }
+        } catch(SQLException e) {
+            // Nothing
+        }
+        return demandeFi;
     }
     
     public static Vector<DemandeFinanciere> getDemandeFiByContrat(int idC){
@@ -110,12 +134,12 @@ public class DemandeFinanciere {
         }
         return objects;
     }
-        public boolean add(){
+    
+    public boolean add(){
         boolean add = false;
         Connection conn = dbUtils.connect();
         String sql = "INSERT INTO demande_financieres VALUES(null, ?,?,?,?);";
-        
-        try{
+        try {
             PreparedStatement prepared = conn.prepareStatement(sql);
             prepared.setInt(1, this.idContrat);
             prepared.setString(2, this.date_depot);
@@ -125,12 +149,53 @@ public class DemandeFinanciere {
             int nbInsert = prepared.executeUpdate();
             if(nbInsert > 0) add = true;
             prepared.close();
-        }catch (SQLException ex){
+        } catch (SQLException ex) {
             add = false;
-            System.out.print(ex.getMessage());
+            System.out.println(ex);
         }
         dbUtils.disconnect(conn);
         return add;
     }
+    
+    public boolean edit() {
+        boolean edit = false;
+        Connection conn = dbUtils.connect();
+        String sql = "UPDATE demande_financieres SET contrat_id = ?, etat = ?, montant_accorde = ? WHERE id = ?;";
+        
+        try {
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, this.idContrat);
+            prepared.setString(2, this.etat);
+            prepared.setDouble(3, this.montant_accorde);
+            prepared.setInt(4, this.id);
             
+            int nbUpdate = prepared.executeUpdate();
+            if(nbUpdate > 0) edit = true;
+            prepared.close();
+        } catch (SQLException ex) {
+            edit = false;
+        }
+        dbUtils.disconnect(conn);
+        return edit;
+    }
+    
+    public boolean delete() {
+        boolean delete = false;
+        Connection conn = dbUtils.connect();
+        
+        String sql = "DELETE FROM demande_financieres WHERE id = ?";
+        
+        try {
+            PreparedStatement prepared = conn.prepareStatement(sql);
+            prepared.setInt(1, this.id);
+            
+            int nbDelete = prepared.executeUpdate();
+            if(nbDelete > 0) delete = true;
+            prepared.close();
+        } catch (SQLException ex) {
+            delete = false;
+        }
+        dbUtils.disconnect(conn);
+        return delete;
+    }
 }
