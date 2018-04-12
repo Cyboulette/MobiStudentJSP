@@ -106,7 +106,7 @@ public class Contrat {
             Connection conn = dbUtils.connect(); // On se connecte à la base
             ResultSet result = dbUtils.query(conn, "SELECT * FROM programmes p, contrats c, diplomes d"
                     + " WHERE p.id = c.programme_id"
-                    + " AND c.diplome_id = d.id"); // Première étape : tout récupérer de toutes les universités
+                    + " AND c.diplome_id = d.id"); // Première étape : tout récupérer de tous les contrats avec leurs programmes et diplomes associés
             
             while(result.next()) {
                 Contrat object = new Contrat(); // On crée notre objet

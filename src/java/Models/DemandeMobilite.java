@@ -91,11 +91,13 @@ public class DemandeMobilite {
     public static DemandeMobilite getMobiById(int idM){
         DemandeMobilite mobilite = null;
         Connection conn = dbUtils.connect(); // On se connecte à la base
-        ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
                 + " WHERE etudiant_id = e.id"
                 + " AND de.diplome_id = d.id"
-                + " AND de.id = "+ idM); // Récupérer les demandes de mobilités par ID
-        try{
+                + " AND de.id = ?");
+            statement.setInt(1, idM);
+            ResultSet result = statement.executeQuery();
             while(result.next()){
                 mobilite = new DemandeMobilite();
                 mobilite.setId(result.getInt("id"));
@@ -116,11 +118,13 @@ public class DemandeMobilite {
     public static Vector<DemandeMobilite> getMobisByEtud(int idEtudiant){
         Vector<DemandeMobilite> lesMobis = new Vector<DemandeMobilite>();// On va stocker tous nos objets récupérés dans un Vecteur
         Connection conn = dbUtils.connect(); // On se connecte à la base
-        ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
                 + " WHERE etudiant_id = e.id"
                 + " AND de.diplome_id = d.id"
-                + " AND e.id = "+ idEtudiant); // Récupérer les demandes de mobilités par Etudiant
-        try{
+                + " AND e.id = ?");
+            statement.setInt(1, idEtudiant);
+            ResultSet result = statement.executeQuery();
             while(result.next()){
                 DemandeMobilite object = new DemandeMobilite();
                 object.setId(result.getInt("id"));
@@ -141,11 +145,13 @@ public class DemandeMobilite {
     public static Vector<DemandeMobilite> getMobisByDiplome(int idD){
         Vector<DemandeMobilite> lesMobis = new Vector<DemandeMobilite>();// On va stocker tous nos objets récupérés dans un Vecteur
         Connection conn = dbUtils.connect(); // On se connecte à la base
-        ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_mobilites de, etudiants e, diplomes d"
                 + " WHERE etudiant_id = e.id"
                 + " AND de.diplome_id = d.id"
-                + " AND d.id = '"+ idD +"';"); // Récupérer les demandes de mobilités par Diplômes
-        try{
+                + " AND d.id = ?"); // Récupérer les demandes de mobilités par Diplômes
+            statement.setInt(1, idD);
+            ResultSet result = statement.executeQuery();
             while(result.next()){
                 DemandeMobilite object = new DemandeMobilite();
                 object.setId(result.getInt("id"));
@@ -165,12 +171,14 @@ public class DemandeMobilite {
     public static Vector<DemandeMobilite> getMobisByUniv(int id){
         Vector<DemandeMobilite> lesMobis = new Vector<DemandeMobilite>();// On va stocker tous nos objets récupérés dans un Vecteur
         Connection conn = dbUtils.connect(); // On se connecte à la base
-        ResultSet result = dbUtils.query(conn, "SELECT * FROM demande_mobilites de, universites u, diplomes d, etudiants e"
+        try{
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM demande_mobilites de, universites u, diplomes d, etudiants e"
                 + " WHERE de.diplome_id = d.id"
                 + " AND d.universite_id = u.id"
                 + " AND e.id = de.etudiant_id"
-                + " AND u.id = '"+ id +"';"); // Récupérer les demandes de mobilités par Universités
-        try{
+                + " AND u.id = ?"); // Récupérer les demandes de mobilités par Universités
+            statement.setInt(1, id);
+            ResultSet result = statement.executeQuery();
             while(result.next()){
                 DemandeMobilite object = new DemandeMobilite();
                 object.setId(result.getInt("id"));
