@@ -45,6 +45,9 @@
                         <li class="nav-item <%=ControllerUtilsInterface.active(request, "addFin", "add")%>">
                             <a class="nav-link" href="./financieres?action=add">Ajouter une Demande Financière</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="http://localhost/MobiStudent/" target="_blank">Partie PHP</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
